@@ -9,11 +9,18 @@ function Input(props) {
         type="text"
         name={props.timeType}
         id={props.timeType}
-        onInput={props.onInputTime}
+        onChange={props.onInputTime}
         placeholder={
           props.timeType === "notification message"
             ? props.timeType
             : props.timeType[0] + props.timeType[0]
+        }
+        value={
+          props.timeType === "notification message"
+            ? props.value
+            : props.value == 0
+            ? ""
+            : props.value - ""
         }
       />
     </div>

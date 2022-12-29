@@ -9,37 +9,51 @@ class App extends React.Component {
     min: "00",
     sec: "00",
     notification: "",
-    timer: {},
-    clicksAdd: 0,
+    timers: [],
     disabled: false,
   };
+
   componentDidMount() {
     if ("Notification" in window && Notification.permission !== "denied") {
       Notification.requestPermission();
     }
   }
-  componentDidUpdate() {
-    if (this.state.timer[Object.keys(this.state.timer)[0]]) {
-      const currentTimer = this.state.timer[Object.keys(this.state.timer)[0]];
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.timers[0]) {
+      const currentTimer = this.state.timers[0];
+
       if (currentTimer.time.join("") == 0) {
         document.title =
           currentTimer.notification.length > 0
             ? currentTimer.notification
-            : `Timer ${Object.keys(this.state.timer)[0]} complete`;
+            : `Timer ${currentTimer.index + 1} complete`;
       } else {
         document.title = currentTimer.time.join(":");
       }
     } else {
       document.title = "countdown timer";
     }
+
+    if (prevState.timers.length !== this.state.timers.length) {
+      let timers = this.state.timers.slice();
+      timers.forEach((timer, i) => (timer.index = i));
+      this.setState({ timers });
+    }
   }
+
+  componentWillUnmount() {
+    let timers = this.state.timers.slice();
+
+    timers.forEach((timer) => timer.stop());
+  }
+
   onInputTime = (event) => {
-    const timeType = event.currentTarget.id;
-    const timeNum = event.currentTarget.value
-      ? event.currentTarget.value - "" < 10
-        ? "0" + event.currentTarget.value
-        : event.currentTarget.value
-      : "00";
+    let value = event.currentTarget.value;
+    let timeType = event.currentTarget.id;
+
+    let timeNum = value ? (value - "" < 10 ? "0" + value : value) : "00";
+
     let hour = this.state.hour;
     let min = this.state.min;
     let sec = this.state.sec;
@@ -52,8 +66,9 @@ class App extends React.Component {
     } else if (timeType === "sec") {
       sec = timeNum;
     } else {
-      notification = event.currentTarget.value;
+      notification = value;
     }
+
     this.setState({ hour, min, sec, notification });
 
     if (isNaN(hour) || isNaN(min) || min > 59 || isNaN(sec) || sec > 59) {
@@ -63,25 +78,68 @@ class App extends React.Component {
     }
   };
 
-  countdown = (currTimer) => {
-    let timer = this.state.timer;
-    let time = timer[currTimer].time.slice();
-    const notificationMessage =
-      timer[currTimer].notification.length > 0
-        ? timer[currTimer].notification
-        : `Timer ${currTimer} complete`;
+  add = () => {
+    const time = [this.state.hour, this.state.min, this.state.sec];
+    const notification = this.state.notification;
+    let timers = this.state.timers.slice();
+    const app = this;
 
-    if (time[2] > 0) {
-      time[2] = time[2] - 1 < 10 ? "0" + (time[2] - 1) : time[2] - 1;
-    } else if (time[1] > 0) {
-      time[1] = time[1] - 1 < 10 ? "0" + (time[1] - 1) : time[1] - 1;
-      time[2] = 59;
-    } else if (time[0] > 0) {
-      time[0] = time[0] - 1 < 10 ? "0" + (time[0] - 1) : time[0] - 1;
-      time[1] = 59;
+    if (time.join("") == 0) {
+      return false;
     }
 
-    timer[currTimer].time = time;
+    timers.push({
+      index: timers.length - 1,
+      originalTime: time,
+      time,
+      isPause: true,
+      isOver: false,
+      notification,
+      start() {
+        this.timeInterval = setInterval(() => {
+          app.countdown(this.index);
+        }, 1000);
+      },
+      stop() {
+        clearInterval(this.timeInterval);
+      },
+    });
+
+    if (timers.length === 1) {
+      timers[0].isPause = false;
+      timers[0].start(0);
+    }
+
+    this.setState({
+      timers,
+      reset: false,
+      hour: "00",
+      min: "00",
+      sec: "00",
+      notification: "",
+    });
+  };
+
+  countdown = (currentTimer) => {
+    let timers = this.state.timers.slice();
+    let time = timers[currentTimer].time.slice();
+
+    const notificationMessage =
+      timers[currentTimer].notification.length > 0
+        ? timers[currentTimer].notification
+        : `Timer ${currentTimer + 1} complete`;
+
+    for (let i = time.length - 1; i >= 0; i--) {
+      if (time[i] > 0) {
+        time[i] = time[i] - 1 < 10 ? `0${time[i] - 1}` : time[i] - 1;
+        if (i < 2) {
+          time[i + 1] = 59;
+        }
+        break;
+      }
+    }
+
+    timers[currentTimer].time = time;
 
     if (time.join("") == 0) {
       if (
@@ -93,98 +151,55 @@ class App extends React.Component {
       } else if (Notification.permission === "granted") {
         const notification = new Notification(notificationMessage);
       }
-      timer[currTimer].stop();
-      timer[currTimer].isPause = true;
-      timer[currTimer].isOver = true;
-    } else {
-      timer[currTimer].start();
-    }
-    this.setState({ timer });
-  };
-
-  start = (currTimer) => {
-    let timer = this.state.timer;
-    timer[currTimer].isPause = false;
-    timer[currTimer].start();
-    this.setState({ timer });
-  };
-
-  pause = (currTimer) => {
-    let timer = this.state.timer;
-    timer[currTimer].isPause = true;
-    timer[currTimer].stop();
-    this.setState({ timer });
-  };
-
-  reset = (currTimer) => {
-    let timer = this.state.timer;
-    timer[currTimer].isPause = true;
-    timer[currTimer].isOver = false;
-    timer[currTimer].stop();
-    timer[currTimer].time = timer[currTimer].originalTime.slice();
-
-    this.setState({ timer });
-  };
-
-  add = () => {
-    const time = [this.state.hour, this.state.min, this.state.sec];
-    const notification = this.state.notification;
-    let timer = this.state.timer;
-    let clicksAdd = this.state.clicksAdd;
-
-    if (time.join("") == 0) {
-      return false;
-    }
-    clicksAdd++;
-
-    timer[clicksAdd] = {
-      originalTime: time.slice(),
-      time,
-      isPause: true,
-      isOver: false,
-      notification,
-      start: () => {
-        timer[clicksAdd].timeOut = setTimeout(
-          () => this.countdown(clicksAdd + ""),
-          1000
-        );
-      },
-      stop: () => {
-        clearTimeout(timer[clicksAdd].timeOut);
-      },
-    };
-
-    if (clicksAdd === 1) {
-      timer[clicksAdd].isPause = false;
-      timer[clicksAdd].start();
+      timers[currentTimer].stop();
+      timers[currentTimer].isPause = true;
+      timers[currentTimer].isOver = true;
     }
 
-    document.querySelectorAll("input").forEach((input) => (input.value = ""));
-
-    this.setState({
-      timer,
-      reset: false,
-      clicksAdd,
-      hour: "00",
-      min: "00",
-      sec: "00",
-      notification: "",
-    });
+    this.setState({ timers });
   };
 
-  delete = (currTimer) => {
-    let timer = this.state.timer;
+  start = (currentTimer) => {
+    let timers = this.state.timers.slice();
 
-    timer[currTimer].stop();
-    delete timer[currTimer];
+    timers[currentTimer].isPause = false;
+    timers[currentTimer].start();
 
-    if (Object.keys(timer).length === 0) {
+    this.setState({ timers });
+  };
+
+  pause = (currentTimer) => {
+    let timers = this.state.timers.slice();
+
+    timers[currentTimer].isPause = true;
+    timers[currentTimer].stop();
+
+    this.setState({ timers });
+  };
+
+  reset = (currentTimer) => {
+    let timers = this.state.timers.slice();
+
+    timers[currentTimer].isPause = true;
+    timers[currentTimer].isOver = false;
+    timers[currentTimer].stop();
+    timers[currentTimer].time = timers[currentTimer].originalTime.slice();
+
+    this.setState({ timers });
+  };
+
+  delete = (currentTimer) => {
+    let timers = this.state.timers.slice();
+
+    timers[currentTimer].stop();
+    timers.splice(currentTimer, 1);
+
+    if (timers.length === 0) {
       this.setState({
         reset: true,
-        clicksAdd: 0,
       });
     }
-    this.setState({ timer });
+    this.setState({ timers });
   };
 
   render() {
@@ -192,36 +207,31 @@ class App extends React.Component {
       <div className="timer">
         <h1>Countdown Timer</h1>
         <div>
-          <Inputs onInputTime={this.onInputTime} />
-          {this.state.reset ? (
-            <button
-              key="start"
-              className="start"
-              onClick={this.add}
-              disabled={this.state.disabled}
-            >
-              Start
-            </button>
-          ) : (
-            <button
-              key="add"
-              className="add"
-              onClick={this.add}
-              disabled={this.state.disabled}
-            >
-              Add timer
-            </button>
-          )}
+          <Inputs
+            onInputTime={this.onInputTime}
+            hour={this.state.hour}
+            min={this.state.min}
+            sec={this.state.sec}
+            notification={this.state.notification}
+          />
+          <button
+            key={this.state.reset ? "start" : "add"}
+            className={this.state.reset ? "start" : "add"}
+            onClick={this.add}
+            disabled={this.state.disabled}
+          >
+            {this.state.reset ? "Start" : "Add timer"}
+          </button>
         </div>
         <div className="timers">
-          {Object.keys(this.state.timer).map((currTimer) => (
+          {this.state.timers.map((timer, i) => (
             <Timer
-              key={currTimer}
-              time={this.state.timer[currTimer].time}
-              notification={this.state.timer[currTimer].notification}
-              isPause={this.state.timer[currTimer].isPause}
-              isOver={this.state.timer[currTimer].isOver}
-              currTimer={currTimer}
+              key={i + 1}
+              index={i}
+              time={timer.time}
+              notification={timer.notification}
+              isPause={timer.isPause}
+              isOver={timer.isOver}
               start={this.start}
               pause={this.pause}
               delete={this.delete}

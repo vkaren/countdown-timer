@@ -3,11 +3,11 @@ import React from "react";
 class Timer extends React.Component {
   render() {
     return (
-      <div className="time" key={this.props.currTimer}>
+      <div className="time">
         <div>
           <button
             className="delete"
-            onClick={() => this.props.delete(this.props.currTimer)}
+            onClick={() => this.props.delete(this.props.index)}
           >
             x
           </button>
@@ -22,14 +22,14 @@ class Timer extends React.Component {
           this.props.isOver ? (
             <button
               className="reset"
-              onClick={() => this.props.reset(this.props.currTimer)}
+              onClick={() => this.props.reset(this.props.index)}
             >
               Reset
             </button>
           ) : (
             <button
               className="start"
-              onClick={() => this.props.start(this.props.currTimer)}
+              onClick={() => this.props.start(this.props.index)}
             >
               Start
             </button>
@@ -39,14 +39,14 @@ class Timer extends React.Component {
             <button
               key="pause"
               className="pause"
-              onClick={() => this.props.pause(this.props.currTimer)}
+              onClick={() => this.props.pause(this.props.index)}
             >
               Pause
             </button>,
             <button
               key="reset"
               className="reset"
-              onClick={() => this.props.reset(this.props.currTimer)}
+              onClick={() => this.props.reset(this.props.index)}
             >
               Reset
             </button>,
