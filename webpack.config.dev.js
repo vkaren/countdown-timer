@@ -6,7 +6,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "main.js",
-    publicPath: "./",
+    publicPath: "/",
     assetModuleFilename: "assets/[hash][ext][query]",
     clean: true,
   },
@@ -15,6 +15,7 @@ module.exports = {
   resolve: {
     extensions: [".js", ".jsx", ".css"],
     alias: {
+      "@icons": path.resolve(__dirname, "src/assets/icons/"),
       "@fonts": path.resolve(__dirname, "src/assets/fonts/"),
       "@pages": path.resolve(__dirname, "src/pages/"),
       "@components": path.resolve(__dirname, "src/components/"),
@@ -57,6 +58,9 @@ module.exports = {
     compress: true,
     historyApiFallback: true,
     open: true,
+    watchFiles: {
+      paths: ["src/**"],
+    },
   },
   stats: { errorDetails: true },
 };

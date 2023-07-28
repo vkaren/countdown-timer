@@ -8,7 +8,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "[name].[contenthash].js",
-    publicPath: "./",
+    publicPath: "/",
     assetModuleFilename: "assets/[hash][ext][query]",
     clean: true,
   },
@@ -17,6 +17,7 @@ module.exports = {
   resolve: {
     extensions: [".js", ".jsx", ".css"],
     alias: {
+      "@icons": path.resolve(__dirname, "src/assets/icons/"),
       "@fonts": path.resolve(__dirname, "src/assets/fonts/"),
       "@pages": path.resolve(__dirname, "src/pages/"),
       "@components": path.resolve(__dirname, "src/components/"),
