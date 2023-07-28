@@ -1,0 +1,99 @@
+/*      Add timer form section      */
+.add-timer-form__section {
+  margin-top: 3rem;
+}
+
+/*      Add timer form      */
+.add-timer-form {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  max-width: 50rem;
+  min-width: 32rem;
+  margin: 0 auto;
+}
+
+/*      Add timer form - inputs      */
+.add-timer-form input {
+  height: 3.5rem;
+  padding: 0 1rem;
+  border-radius: 5px;
+  border: 2px solid var(--black);
+  text-align: center;
+  background: var(--very-light-orange);
+}
+.add-timer-form input::placeholder {
+  color: var(--gray);
+}
+
+/*      Add timer form - notification input     */
+.adf__input-notif {
+  max-width: 18rem;
+}
+
+/*      Add timer form - submit button     */
+.adf__add-timer-btn {
+  min-height: 3.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  font-size: 1.3rem;
+  color: var(--white);
+  background: var(--purple);
+}
+
+@media (max-width: 785px) {
+  /*      Add timer form modal section      */
+  .add-timer-form__section {
+    position: fixed;
+    top: calc(50vh - 12.5rem);
+    left: calc(50vw - 17.5rem);
+    z-index: 10;
+    width: 35rem;
+    height: 25rem;
+    background: var(--green);
+    border-radius: 10px;
+    flex-direction: column;
+  }
+
+  /*      Add timer form     */
+  .add-timer-form {
+    flex-direction: column;
+    height: 100%;
+  }
+
+  /*      Modal toggle button     */
+  .open-modal {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    width: 6rem;
+    height: 6rem;
+    margin: 3rem;
+    font-size: 4rem;
+    color: var(--white);
+    border-radius: 50%;
+    border: 1px solid var(--black);
+    background: var(--purple);
+    transform: rotate(135deg);
+  }
+
+  /*      Modal overlay     */
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    background: var(--transparent-black);
+  }
+
+  .hidden {
+    opacity: 0;
+  }
+  .add-timer-form__section.hidden + .open-modal {
+    transform: rotate(0deg);
+  }
+}

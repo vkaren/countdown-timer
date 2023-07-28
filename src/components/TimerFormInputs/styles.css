@@ -1,0 +1,9 @@
+/*      Add timer form - timer inputs container     */
+.adf__inputs-timer {
+  display: flex;
+}
+
+/*      Add timer form - timer inputs     */
+.adf_input-timer {
+  max-width: 5rem;
+}

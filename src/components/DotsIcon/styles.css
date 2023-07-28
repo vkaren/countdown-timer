@@ -1,0 +1,7 @@
+/*      Add timer form - timer dots icon     */
+.adf_dots-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15px;
+}
