@@ -1,12 +1,17 @@
+import { useContext } from "react";
+import { AppContext } from "@context";
 import DotsIcon from "../DotsIcon";
 import "./styles.css";
 
-const TimerFormInputs = ({ timerFormInputs }) => {
+const TimerFormInputs = () => {
+  const { timerProperties, onSettingTime } = useContext(AppContext);
+
   return (
     <div className="adf__inputs-timer">
-      {timerFormInputs.map((timerInput, i) => {
+      {timerProperties.map((timerInput, i) => {
         const input = (
           <input
+            onInput={onSettingTime()}
             key={timerInput}
             type="text"
             name={timerInput}
@@ -21,7 +26,7 @@ const TimerFormInputs = ({ timerFormInputs }) => {
           />
         );
 
-        if (i !== timerFormInputs.length - 1) {
+        if (i !== timerProperties.length - 1) {
           return [input, <DotsIcon key={`dots-${timerInput}`} />];
         }
         return input;

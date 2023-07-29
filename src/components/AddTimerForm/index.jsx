@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AppContext } from "@context";
 import TimerFormInputs from "@components/TimerFormInputs";
 import "./styles.css";
 
 const AddTimerForm = ({ timerFormInputs }) => {
+  const { onSettingNotifMssg, onAddTimer } = useContext(AppContext);
+
   // For mobile devices
   const [isOnMobile, setIsOnMobile] = useState(window.innerWidth <= 785);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,6 +32,7 @@ const AddTimerForm = ({ timerFormInputs }) => {
           <TimerFormInputs timerFormInputs={timerFormInputs} />
 
           <input
+            onInput={onSettingNotifMssg()}
             type="text"
             name="notif-message"
             id="notif-message"
@@ -37,7 +41,9 @@ const AddTimerForm = ({ timerFormInputs }) => {
             autoComplete="off"
             aria-label="notification message input"
           />
-          <button className="adf__add-timer-btn">Add timer</button>
+          <button onClick={onAddTimer} className="adf__add-timer-btn">
+            Add timer
+          </button>
         </form>
       </section>
 

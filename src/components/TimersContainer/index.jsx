@@ -1,18 +1,22 @@
+import { useContext } from "react";
+import { AppContext } from "@context";
 import Timer from "../Timer";
 import "./styles.css";
 
 const TimersContainer = () => {
+  const { timers } = useContext(AppContext);
   return (
     <section className="timers__section">
-      {/* {timers.map((timer, i) => (
+      {timers.map((timer, i) => (
         <Timer
-          key={i}
+          key={timer.id}
+          id={timer.id}
           time={timer.time}
-          notifMessage={timer.notifMessage}
+          notifMessage={timer.notifMssg}
           isPaused={timer.isPaused}
           isOver={timer.isOver}
         />
-      ))} */}
+      ))}
     </section>
   );
 };

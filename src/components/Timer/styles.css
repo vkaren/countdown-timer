@@ -12,6 +12,14 @@
   background: var(--transparent-black);
 }
 
+/*      Timer remove button     */
+.timer__container .timer__remove {
+  position: absolute;
+  left: -3rem;
+  padding: 0;
+  background: transparent;
+}
+
 /*      Timer content container     */
 .timer__content {
   display: flex;
@@ -29,7 +37,7 @@
 
 /*      Timer content - Notification message     */
 .timer_notif-mssg {
-  width: 80%;
+  width: fit-content;
   max-width: 18rem;
   font-size: 1.5rem;
   font-weight: 500;
