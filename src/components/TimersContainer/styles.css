@@ -1,0 +1,7 @@
+.timers__section {
+  position: relative;
+  z-index: 7;
+  width: 100%;
+  max-width: 60rem;
+  margin: 5rem auto 0 auto;
+}

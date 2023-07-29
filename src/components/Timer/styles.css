@@ -1,0 +1,86 @@
+/*      Timer container     */
+.timer__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  min-height: 6rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  background: var(--transparent-black);
+}
+
+/*      Timer content container     */
+.timer__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+
+/*      Timer content - Current time     */
+.timer_current-time {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/*      Timer content - Notification message     */
+.timer_notif-mssg {
+  width: 80%;
+  max-width: 18rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  cursor: default;
+}
+.timer_notif-mssg::-webkit-scrollbar {
+  display: none;
+}
+.timer_notif-mssg:hover,
+.timer_notif-mssg:active {
+  scrollbar-width: thin;
+}
+.timer_notif-mssg:hover::-webkit-scrollbar,
+.timer_notif-mssg:active::-webkit-scrollbar {
+  display: block;
+  height: 5px;
+  background: var(--white);
+}
+.timer_notif-mssg:hover::-webkit-scrollbar-thumb,
+.timer_notif-mssg:active::-webkit-scrollbar-thumb {
+  background: var(--light-gray);
+}
+/*      Timer container buttons     */
+.timer__on-start-btns,
+.timer__on-pause-btn {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+  gap: 2rem;
+}
+
+/*      Timer buttons     */
+.timer__container button {
+  padding: 0.5rem 1rem;
+  color: var(--black);
+}
+
+/*      Start timer button     */
+.timer_start-btn {
+  background: var(--green);
+}
+
+/*      Pause timer button     */
+.timer_pause-btn {
+  background: var(--blue);
+}
+
+/*      Reset timer button     */
+.timer_reset-btn {
+  background: var(--red);
+}

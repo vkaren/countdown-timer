@@ -1,4 +1,5 @@
 import AddTimerForm from "@components/AddTimerForm";
+import TimersContainer from "@components/TimersContainer";
 import "./styles.css";
 
 const App = () => {
@@ -7,6 +8,7 @@ const App = () => {
     <>
       <h1>Countdown timer</h1>
       <AddTimerForm timerFormInputs={timerFormInputs} />
+      <TimersContainer />
     </>
   );
 };
