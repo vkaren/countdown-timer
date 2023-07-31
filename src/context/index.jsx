@@ -38,20 +38,15 @@ function AppProvider({ children }) {
         timerProperties.indexOf(timeType) === 0;
 
       if (isANumber && canSetTime) {
-        setTimerTimeToAdd({
-          ...timerTimeToAdd,
-          [timeType]: timeValue,
-        });
+        e.target.classList.remove("error");
       } else {
-        console.log("error");
-
-        if (timerTimeToAdd[timeType]) {
-          setTimerTimeToAdd({
-            ...timerTimeToAdd,
-            [timeType]: 0,
-          });
-        }
+        e.target.classList.add("error");
       }
+
+      setTimerTimeToAdd({
+        ...timerTimeToAdd,
+        [timeType]: timeValue,
+      });
     };
 
     return debounce(setTime, 200);
@@ -68,7 +63,9 @@ function AppProvider({ children }) {
 
   const onAddTimer = (e) => {
     e.preventDefault();
-    const isATimerTime = Math.max(...Object.values(timerTimeToAdd)) > 0;
+    const timerTimeValues = Object.values(timerTimeToAdd);
+    const isATimerTime =
+      !timerTimeValues.includes(NaN) && Math.max(...timerTimeValues) > 0;
 
     if (isATimerTime) {
       const timerTimeInSecs = convertTimeToSeconds(timerTimeToAdd);

@@ -7,3 +7,7 @@
 .adf_input-timer {
   max-width: 5rem;
 }
+
+.adf_input-timer.error {
+  border: 2px solid var(--pink);
+}
