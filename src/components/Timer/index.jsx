@@ -19,6 +19,18 @@ const Timer = ({ id, initialTime, initialTimeFormat, notifMessage }) => {
       countdownTimeout = setTimeout(countdown, 1000);
     }
 
+    if (isOver) {
+      if (
+        !("Notification" in window) ||
+        Notification.permission === "denied" ||
+        Notification.permission === "default"
+      ) {
+        alert(notifMessage);
+      } else if (Notification.permission === "granted") {
+        const notification = new Notification(notifMessage);
+      }
+    }
+
     return () => clearTimeout(countdownTimeout);
   }, [timerTime, isPaused, isOver]);
 

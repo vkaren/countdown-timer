@@ -12,6 +12,12 @@ function AppProvider({ children }) {
   const [timerTimeToAdd, setTimerTimeToAdd] = useState(timerStructure);
   const [timerNotifToAdd, setTimerNotifToAdd] = useState("");
 
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission !== "denied") {
+      Notification.requestPermission();
+    }
+  }, []);
+
   const onSettingTime = () => {
     const maxTimeValues = {
       year: 10,
