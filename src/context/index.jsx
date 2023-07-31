@@ -1,28 +1,26 @@
 import { createContext, useState, useEffect } from "react";
-import { debounce } from "@utils/debounce.js";
+import timerStructure from "@utils/timerStructure";
+import debounce from "@utils/debounce";
+import convertTimeToSeconds from "@utils/convertTimeToSeconds";
+import getTimeFormat from "@utils/getTimeFormat";
 
 const AppContext = createContext({});
 
 function AppProvider({ children }) {
-  const timerStructure = {
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  };
   const timerProperties = Object.keys(timerStructure);
   const [timers, setTimers] = useState([]);
   const [timerTimeToAdd, setTimerTimeToAdd] = useState(timerStructure);
   const [timerNotifToAdd, setTimerNotifToAdd] = useState("");
 
-  // useEffect(() => console.log(timers), [timers]);
-
   const onSettingTime = () => {
     const maxTimeValues = {
-      year: 100,
-      days: 365,
+      year: 10,
+      month: 12,
+      week: 4,
+      day: 7,
       hour: 24,
-      minutes: 60,
-      seconds: 60,
+      minute: 60,
+      second: 60,
     };
 
     const setTime = (e) => {
@@ -67,13 +65,12 @@ function AppProvider({ children }) {
     const isATimerTime = Math.max(...Object.values(timerTimeToAdd)) > 0;
 
     if (isATimerTime) {
+      const timerTimeInSecs = convertTimeToSeconds(timerTimeToAdd);
       const newTimer = {
         id: Math.random(),
-        time: { ...timerTimeToAdd },
-        initialTime: { ...timerTimeToAdd },
+        initialTime: timerTimeInSecs,
+        initialTimeFormat: getTimeFormat(timerTimeInSecs),
         notifMssg: timerNotifToAdd,
-        isPaused: false,
-        isOver: false,
       };
 
       setTimers([...timers, newTimer]);

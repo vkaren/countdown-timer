@@ -1,13 +1,56 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "@context";
+import getTimeFormat from "@utils/getTimeFormat";
 import removeIcon from "@icons/icon-remove.png";
 import "./styles.css";
 
-const Timer = ({ id, time, notifMessage, isPaused, isOver }) => {
+const Timer = ({ id, initialTime, initialTimeFormat, notifMessage }) => {
   const { onDeleteTimer } = useContext(AppContext);
-  const timeContent = Object.values(time)
-    .map((num) => (num < 10 ? `0${num}` : num))
-    .join(":");
+
+  const [timerTime, setTimerTime] = useState(initialTime);
+  const [timeFormat, setTimeFormat] = useState(initialTimeFormat);
+  const [isPaused, setIsPaused] = useState(true);
+  const [isOver, setIsOver] = useState(false);
+
+  useEffect(() => {
+    let countdownTimeout;
+
+    if (!isPaused && !isOver) {
+      countdownTimeout = setTimeout(countdown, 1000);
+    }
+
+    return () => clearTimeout(countdownTimeout);
+  }, [timerTime, isPaused, isOver]);
+
+  const countdown = () => {
+    const newTimerTime = timerTime - 1;
+
+    if (newTimerTime < 0) {
+      setIsPaused(true);
+      setIsOver(true);
+      return;
+    }
+
+    const newTimeFormat = getTimeFormat(newTimerTime);
+
+    setTimeFormat(newTimeFormat);
+    setTimerTime(newTimerTime);
+  };
+
+  const onStartCountdown = () => {
+    setIsPaused(false);
+  };
+
+  const onPauseCountdown = () => {
+    setIsPaused(true);
+  };
+
+  const onResetCountdown = () => {
+    setTimerTime(initialTime);
+    setTimeFormat(initialTimeFormat);
+    setIsPaused(true);
+    setIsOver(false);
+  };
 
   return (
     <article id={id} className={"timer__container"}>
@@ -17,7 +60,7 @@ const Timer = ({ id, time, notifMessage, isPaused, isOver }) => {
 
       <div className="timer__content">
         <div className="timer_current-time">
-          <span>{timeContent}</span>
+          <span>{timeFormat}</span>
         </div>
 
         <div className="timer_notif-mssg">
@@ -25,14 +68,22 @@ const Timer = ({ id, time, notifMessage, isPaused, isOver }) => {
         </div>
       </div>
 
-      {isPaused ? (
+      {isPaused && !isOver ? (
         <div className="timer__on-pause-btn">
-          <button className="timer_start-btn">Start</button>
+          <button onClick={onStartCountdown} className="timer_start-btn">
+            Start
+          </button>
         </div>
       ) : (
         <div className="timer__on-start-btns">
-          <button className="timer_pause-btn">Pause</button>
-          <button className="timer_reset-btn">Reset</button>
+          {!isOver && (
+            <button className="timer_pause-btn" onClick={onPauseCountdown}>
+              Pause
+            </button>
+          )}
+          <button className="timer_reset-btn" onClick={onResetCountdown}>
+            Reset
+          </button>
         </div>
       )}
     </article>

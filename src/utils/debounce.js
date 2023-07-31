@@ -1,4 +1,4 @@
-export const debounce = (callback, wait) => {
+const debounce = (callback, wait) => {
   let timer;
 
   return (e) => {
@@ -8,3 +8,5 @@ export const debounce = (callback, wait) => {
     timer = setTimeout(() => callback(e), wait);
   };
 };
+
+export default debounce;

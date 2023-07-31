@@ -11,10 +11,9 @@ const TimersContainer = () => {
         <Timer
           key={timer.id}
           id={timer.id}
-          time={timer.time}
+          initialTime={timer.initialTime}
+          initialTimeFormat={timer.initialTimeFormat}
           notifMessage={timer.notifMssg}
-          isPaused={timer.isPaused}
-          isOver={timer.isOver}
         />
       ))}
     </section>
