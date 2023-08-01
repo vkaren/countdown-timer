@@ -20,14 +20,17 @@ const Timer = ({ id, initialTime, initialTimeFormat, notifMessage }) => {
     }
 
     if (isOver) {
+      const notificationMessage = notifMessage || "Timer over.";
+
       if (
-        !("Notification" in window) ||
         Notification.permission === "denied" ||
         Notification.permission === "default"
       ) {
-        alert(notifMessage);
+        alert(notificationMessage);
       } else if (Notification.permission === "granted") {
-        const notification = new Notification(notifMessage);
+        navigator.serviceWorker.ready.then((registration) => {
+          registration.showNotification(notificationMessage);
+        });
       }
     }
 
