@@ -6,7 +6,7 @@ The Countdown Timer application allows users to set dynamic timers using a struc
 
 <img src="./readme_imgs/app.png" width="200px">
 
-## How works?
+## How it works?
 
 The application utilizes a timer structure defined in \_src/utils/timerStructure. This structure allows for dynamic form inputs, enabling users to customize timer durations as needed.
 
