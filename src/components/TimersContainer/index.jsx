@@ -5,6 +5,7 @@ import "./styles.css";
 
 const TimersContainer = () => {
   const { timers } = useContext(AppContext);
+
   return (
     <section className="timers__section">
       {timers.map((timer, i) => (
@@ -12,7 +13,6 @@ const TimersContainer = () => {
           key={timer.id}
           id={timer.id}
           initialTime={timer.initialTime}
-          initialTimeFormat={timer.initialTimeFormat}
           notifMessage={timer.notifMssg}
         />
       ))}

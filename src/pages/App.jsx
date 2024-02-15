@@ -1,14 +1,18 @@
 import { AppProvider } from "@context";
-import AddTimerForm from "@components/AddTimerForm";
-import TimersContainer from "@components/TimersContainer";
+import { Suspense, lazy } from "react";
 import "./styles.css";
+
+const AddTimerForm = lazy(() => import("../components/AddTimerForm"));
+const TimersContainer = lazy(() => import("../components/TimersContainer"));
 
 const App = () => {
   return (
     <AppProvider>
       <h1>Countdown timer</h1>
-      <AddTimerForm />
-      <TimersContainer />
+      <Suspense>
+        <AddTimerForm />
+        <TimersContainer />
+      </Suspense>
     </AppProvider>
   );
 };

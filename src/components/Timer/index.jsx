@@ -4,11 +4,10 @@ import getTimeFormat from "@utils/getTimeFormat";
 import removeIcon from "@icons/icon-remove.png";
 import "./styles.css";
 
-const Timer = ({ id, initialTime, initialTimeFormat, notifMessage }) => {
+const Timer = ({ id, initialTime, notifMessage }) => {
   const { onDeleteTimer } = useContext(AppContext);
 
-  const [timerTime, setTimerTime] = useState(initialTime);
-  const [timeFormat, setTimeFormat] = useState(initialTimeFormat);
+  const [time, setTime] = useState(initialTime);
   const [isPaused, setIsPaused] = useState(true);
   const [isOver, setIsOver] = useState(false);
 
@@ -35,21 +34,18 @@ const Timer = ({ id, initialTime, initialTimeFormat, notifMessage }) => {
     }
 
     return () => clearTimeout(countdownTimeout);
-  }, [timerTime, isPaused, isOver]);
+  }, [time, isPaused, isOver]);
 
   const countdown = () => {
-    const newTimerTime = timerTime - 1;
+    const newTime = time - 1;
 
-    if (newTimerTime < 0) {
+    if (newTime < 0) {
       setIsPaused(true);
       setIsOver(true);
       return;
     }
 
-    const newTimeFormat = getTimeFormat(newTimerTime);
-
-    setTimeFormat(newTimeFormat);
-    setTimerTime(newTimerTime);
+    setTime(newTime);
   };
 
   const onStartCountdown = () => {
@@ -61,8 +57,7 @@ const Timer = ({ id, initialTime, initialTimeFormat, notifMessage }) => {
   };
 
   const onResetCountdown = () => {
-    setTimerTime(initialTime);
-    setTimeFormat(initialTimeFormat);
+    setTime(initialTime);
     setIsPaused(true);
     setIsOver(false);
   };
@@ -75,7 +70,7 @@ const Timer = ({ id, initialTime, initialTimeFormat, notifMessage }) => {
 
       <div className="timer__content">
         <div className="timer_current-time">
-          <span>{timeFormat}</span>
+          <span>{getTimeFormat(time)}</span>
         </div>
 
         <div className="timer_notif-mssg">

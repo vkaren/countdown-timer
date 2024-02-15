@@ -4,14 +4,13 @@ import DotsIcon from "../DotsIcon";
 import "./styles.css";
 
 const TimerFormInputs = () => {
-  const { timerProperties, onSettingTime } = useContext(AppContext);
+  const { timerProperties } = useContext(AppContext);
 
   return (
     <div className="adf__inputs-timer">
       {timerProperties.map((timerInput, i) => {
         const input = (
           <input
-            onInput={onSettingTime()}
             key={timerInput}
             type="text"
             name={timerInput}

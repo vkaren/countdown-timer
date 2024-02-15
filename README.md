@@ -1,69 +1,37 @@
 # Countdown timer
 
-<img src="./readme_imgs/app-form.png" width="300px">
+The Countdown Timer application allows users to set dynamic timers using a structured form and receive notifications when the timer expires.
 
-<img src="./readme_imgs/app.png" width="300px">
+<img src="./readme_imgs/app-form.png" width="200px">
+
+<img src="./readme_imgs/app.png" width="200px">
 
 ## How works?
 
-The app uses a timer structure to have dynamic form inputs and save the timer time values added by the user.
+The application utilizes a timer structure defined in \_src/utils/timerStructure. This structure allows for dynamic form inputs, enabling users to customize timer durations as needed.
 
-_src/utils/timerStructure_
+<img src="./readme_imgs/timerStructure.PNG" width="400px">
 
-<img src="./readme_imgs/timerStructure.PNG" width="500px">
-
-_src/context/index.jsx_
-
-<img src="./readme_imgs/context-state.PNG" width="500px">
-
-_src/components/TimerFormInputs_
-
-<img src="./readme_imgs/timer-inputs.PNG" width="500px">
-
-For notification messages works, the browser requests a notification permission and if it's denied or not answered, it will use the alert web api.
+For notification messages to function, the application requests permission from the browser. If permission is denied or not answered, the app resorts to using the alert Web API.
 
 _src/context/index.jsx_
 
-<img src="./readme_imgs/notification.PNG" width="500px">
+<img src="./readme_imgs/notification.PNG" width="400px">
 
-The form input events use a debounce function for not update the state repeatedly.
-
-When the user starts typing in the timer inputs, the onSettingTime function will validate if the entered value is valid to display or clear a form error.
-
-_src/context/index.jsx_
-
-<img src="./readme_imgs/setting-time.PNG" width="500px">
-
-The onSettingNotifMssg function does not require any validation.
-
-_src/context/index.jsx_
-
-<img src="./readme_imgs/setting-notif.PNG" width="500px">
-
-When clicking on the add timer button, the onAddTimer function will validate the time values of the timer, if it's valid, a new timer will be added with the time in seconds, a time format to display to the user and the notification message.
-
-// add
+When the user clicks the "Add Timer" button, the onAddTimer function validates the timer's time values. If the values are valid, a new timer is added with the specified time in seconds, and a corresponding notification message.
 
 _src/context/index.jsx_
 
 <img src="./readme_imgs/add.PNG" width="500px">
 
-A timer can be deleted by its id.
+Timers can be deleted by their respective IDs, providing users with the flexibility to manage their timers.
 
 _src/context/index.jsx_
 
 <img src="./readme_imgs/delete.PNG" width="500px">
 
-Each timer has its unique state and methods.
-
-_src/components/Timer_
-
-<img src="./readme_imgs/timer-state.PNG" width="500px">
-
-<img src="./readme_imgs/features.PNG" width="500px">
-
-A use effect hook is listening to the changes of the timerTime, isPaused and isOver states to starts a countdown or notify to the user when the timer has expired
+A useEffect hook is in place to monitor changes in time, isPaused, and isOver states. This hook initiates a countdown or notifies the user when the timer expires.
 
 <img src="./readme_imgs/countdown-effect.PNG" width="500px">
 
-<img src="./readme_imgs/countdown.PNG" width="500px">
+Feel free to explore, customize, and enhance the application based on your requirements!

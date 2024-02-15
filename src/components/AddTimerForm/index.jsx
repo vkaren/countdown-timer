@@ -1,10 +1,11 @@
-import { useContext, useState } from "react";
+import { createRef, useContext, useState } from "react";
 import { AppContext } from "@context";
 import TimerFormInputs from "@components/TimerFormInputs";
 import "./styles.css";
 
-const AddTimerForm = ({ timerFormInputs }) => {
-  const { onSettingNotifMssg, onAddTimer } = useContext(AppContext);
+const AddTimerForm = () => {
+  const { addTimer } = useContext(AppContext);
+  const formRef = createRef();
 
   // For mobile devices
   const [isOnMobile, setIsOnMobile] = useState(window.innerWidth <= 785);
@@ -13,13 +14,27 @@ const AddTimerForm = ({ timerFormInputs }) => {
   const onToggleAddTimerModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-  const closeAddTimerModal = () => {
-    setIsModalOpen(false);
-  };
+
   const onWindowResize = () => {
     setIsOnMobile(window.innerWidth <= 785);
   };
   window.addEventListener("resize", onWindowResize);
+
+  const onClickAddTimer = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(formRef.current);
+    const hour = formData.get("hour");
+    const minute = formData.get("minute");
+    const second = formData.get("second");
+    const notifMssg = formData.get("notif-message");
+
+    const timer = { hour, minute, second };
+
+    addTimer({ timer, notifMssg });
+    onToggleAddTimerModal();
+    formRef.current.reset();
+  };
 
   return (
     <>
@@ -28,11 +43,10 @@ const AddTimerForm = ({ timerFormInputs }) => {
           isOnMobile && !isModalOpen ? "hidden" : ""
         }`}
       >
-        <form className="add-timer-form">
-          <TimerFormInputs timerFormInputs={timerFormInputs} />
+        <form ref={formRef} className="add-timer-form">
+          <TimerFormInputs />
 
           <input
-            onInput={onSettingNotifMssg()}
             type="text"
             name="notif-message"
             id="notif-message"
@@ -41,7 +55,8 @@ const AddTimerForm = ({ timerFormInputs }) => {
             autoComplete="off"
             aria-label="notification message input"
           />
-          <button onClick={onAddTimer} className="adf__add-timer-btn">
+
+          <button onClick={onClickAddTimer} className="adf__add-timer-btn">
             Add timer
           </button>
         </form>
@@ -53,7 +68,7 @@ const AddTimerForm = ({ timerFormInputs }) => {
         </button>
       )}
       {isOnMobile && isModalOpen && (
-        <div className="overlay" onClick={closeAddTimerModal}></div>
+        <div className="overlay" onClick={onToggleAddTimerModal}></div>
       )}
     </>
   );
